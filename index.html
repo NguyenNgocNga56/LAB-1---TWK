@@ -644,6 +644,224 @@
     </div>
 </section>
 
+<!-- NEW ARRIVALS -->
+<section class="py-16 bg-white">
+    <div class="container mx-auto px-4">
+
+        <div class="text-center mb-6">
+            <h2 class="text-3xl font-black tracking-wide uppercase">NEW ARRIVALS</h2>
+        </div>
+
+        <div class="flex justify-center mb-8">
+            <div id="new-arrivals-tabs" class="inline-flex bg-gray-100 rounded-full p-1 gap-3">
+                <button data-tab="tires" class="tab-btn px-5 py-2 rounded-full text-sm font-semibold bg-gray-200 text-red-600">Tires & Wheels</button>
+                <button data-tab="headlight" class="tab-btn px-5 py-2 rounded-full text-sm font-semibold text-gray-600">Headlight</button>
+                <button data-tab="rims" class="tab-btn px-5 py-2 rounded-full text-sm font-semibold text-gray-600">Automotive Rims</button>
+            </div>
+        </div>
+
+    <div id="new-arrivals-grid" class="grid grid-cols-2 md:grid-cols-3 lg:grid-cols-5 gap-4"></div>
+
+    <div class="flex justify-center mt-12">
+      <button id="all-products-btn" class="all-products px-8 py-2 rounded-full text-sm bg-gray-200 text-gray-600 border border-gray-200 transition-all">All Products</button>
+    </div>
+  </div>
+
+  <style>
+    .tab-btn { transition: all .15s ease; }
+    .tab-btn.active { background-color: #f3f3f3; color: #d3150b; box-shadow: none; }
+    .tab-btn:hover { background-color: #f8f8f8; }
+
+    .product-card { position: relative; overflow: hidden; }
+    .product-card { display: flex; flex-direction: column; gap: 8px; }
+    .product-card .img-wrap { background: #fafafa; border: 1px solid #e5e7eb; border-radius: 8px; padding: 20px 16px; height: 200px; display:flex; align-items:center; justify-content:center; overflow: hidden; }
+    .product-card img { max-height: 100%; max-width: 100%; object-fit: contain; transition: transform 0.3s ease; }
+    .product-card:hover img { transform: scale(1.05); }
+    .product-card .heart { position: absolute; right: 12px; top: 12px; width: 32px; height: 32px; border-radius: 50%; background: rgba(255,255,255,0.95); display:flex; align-items:center; justify-content:center; color:#d1d5db; cursor: pointer; transition: all 0.2s; }
+    .product-card .heart:hover { color: #d3150b; background: rgba(255,255,255,1); }
+    .product-card:hover { box-shadow: 0 10px 24px rgba(0,0,0,0.08); transform: translateY(-3px); transition: all 0.3s ease; }
+
+    .product-sub { color: #a0aec0; font-size: 11px; font-weight: 500; text-transform: uppercase; letter-spacing: 0.5px; }
+    .product-title { font-weight: 600; color: #1f2937; font-size: 13px; line-height: 1.4; }
+
+    .stars { display: flex; align-items: center; gap: 2px; }
+    .stars i { color: #f59e0b; font-size: 12px; }
+    .stars .rating-count { color: #9ca3af; font-size: 11px; margin-left: 4px; }
+
+    #all-products-btn { cursor: pointer; font-weight: 600; }
+    #all-products-btn:hover { background-color: #d3150b; color: #fff; border-color: #d3150b; box-shadow: 0 8px 20px rgba(211,21,11,0.2); transform: scale(1.02); }
+  </style>    <script>
+        (function(){
+            const products = { tires: [], headlight: [], rims: [] };
+
+            // Map ảnh cho từng category
+            const imageMap = {
+                tires: [
+                    'style_image/1-21-700x700(1).jpg',
+                    'style_image/1-21-700x700.jpg',
+                    'style_image/1-26-700x700.jpg',
+                    'style_image/1-27-700x700.jpg',
+                    'style_image/1-28-700x700.jpg',
+                    'style_image/1-29-700x700.jpg',
+                    'style_image/1-31-700x700.jpg',
+                    'style_image/1-32-700x700.jpg',
+                    'style_image/1-33-700x700.jpg',
+                    'style_image/1-35-700x700.jpg'
+                ],
+                headlight: [
+                    'style_image/2-21-600x600(1).jpg',
+                    'style_image/2-21-600x600.jpg',
+                    'style_image/2-22-600x600(1).jpg',
+                    'style_image/2-22-600x600.jpg',
+                    'style_image/2-23-600x600(1).jpg',
+                    'style_image/2-23-600x600.jpg',
+                    'style_image/2-26-600x600(1).jpg',
+                    'style_image/2-26-600x600.jpg',
+                    'style_image/2-30-600x600.jpg',
+                    'style_image/2-32-600x600.jpg'
+                ],
+                rims: [
+                    'style_image/1-2-700x700(1).jpg',
+                    'style_image/1-2-700x700.jpg',
+                    'style_image/1-19-600x600.jpg',
+                    'style_image/1-20-600x600.jpg',
+                    'style_image/1-20-700x700.jpg',
+                    'style_image/1-22-600x600(1).jpg',
+                    'style_image/1-22-600x600.jpg',
+                    'style_image/1-23-600x600(1).jpg',
+                    'style_image/1-23-600x600.jpg',
+                    'style_image/1-24-600x600.jpg'
+                ]
+            };
+
+            function makeItem(i, cat){
+                const discount = i % 3 === 0 ? 25 : 0;
+                const base = 80 + i * 5;
+                const categoryNames = {
+                    tires: 'CAR AUDIO SYSTEMS',
+                    headlight: 'AUTOMOTIVE LIGHT',
+                    rims: 'AUTOMOTIVE RIMS'
+                };
+                const titles = {
+                    tires: [
+                        'Dorman Steel Wheel Compatible with Select Honda Models',
+                        'Michelin Defender All Season Tire',
+                        'Goodyear Performance Radial Tire',
+                        'Continental DWS Ultra Performance',
+                        'Bridgestone Turanza QuietTrack',
+                        'Pirelli P7 Cinturato Premium',
+                        'Yokohama Avid Ascend GT Tire',
+                        'Toyo Proxes TQST All Season',
+                        'Hankook Kinergy ST H735',
+                        'Cooper CS5 Grand Touring'
+                    ],
+                    headlight: [
+                        'LED Headlight Assembly High Performance',
+                        'HID Xenon Headlight Kit Premium',
+                        'Halogen Headlight OEM Compatible',
+                        'Adaptive LED Headlights Smart',
+                        'Bi-LED Projection Headlight System',
+                        'LED DRL Headlight Module',
+                        'Smart LED Headlight Upgrade',
+                        'Automotive Headlight Assembly',
+                        'Premium LED Lighting Set',
+                        'Professional Grade Headlight'
+                    ],
+                    rims: [
+                        'Alloy Wheel 18" Premium Black',
+                        'Performance Rim 19" Chrome Finish',
+                        'Sport Wheel 20" Silver',
+                        'Luxury Rim 18" Titanium',
+                        'Racing Wheel 17" Carbon Black',
+                        'Custom Rim 19" Gunmetal',
+                        'Forged Wheel 20" Polished',
+                        'Alloy Rim 18" Silver Metallic',
+                        'Performance Wheel 19" Matte Black',
+                        'Premium Rim 20" Diamond Cut'
+                    ]
+                };
+
+                return {
+                    img: imageMap[cat][i],
+                    name: categoryNames[cat],
+                    title: titles[cat][i],
+                    rating: (i % 5) + 1,
+                    price: (base).toFixed(2),
+                    original: discount ? (base + (base * discount/100)).toFixed(2) : null,
+                    discount: discount
+                };
+            }
+
+            for(let i=0;i<10;i++){
+                products.tires.push(makeItem(i,'tires'));
+                products.headlight.push(makeItem(i,'headlight'));
+                products.rims.push(makeItem(i,'rims'));
+            }
+
+            const grid = document.getElementById('new-arrivals-grid');
+            const tabs = Array.from(document.querySelectorAll('#new-arrivals-tabs .tab-btn'));
+
+            function renderList(cat){
+                grid.innerHTML = '';
+                products[cat].forEach(p => {
+                    const el = document.createElement('div');
+                    el.className = 'product-card bg-white border border-gray-100 rounded-lg p-3 text-sm';
+                    el.innerHTML = `
+                        <div class="heart"><i class="fa-regular fa-heart"></i></div>
+                        <div class="img-wrap mb-1">
+                            <img src="${p.img}" alt="${p.title}" class="object-contain">
+                        </div>
+                        <div class="product-sub">${p.name}</div>
+                        <div class="product-title">${p.title}</div>
+                        <div class="stars text-xs">
+                            ${renderStars(p.rating)} <span class="rating-count">(${p.rating})</span>
+                        </div>
+                        <div class="text-sm font-semibold text-gray-900 mt-1">
+                            ${p.discount ? `<span class='font-bold'>$${p.price}</span> <span class='line-through text-gray-400 ml-2 text-xs'>$${p.original}</span> <span class='ml-2 text-white bg-red-600 text-xs px-1.5 rounded'>-${p.discount}%</span>` : `<span class='font-bold'>$${p.price}</span>`}
+                        </div>
+                    `;
+                    grid.appendChild(el);
+                });
+            }
+
+            function renderStars(n){
+                let res = '';
+                for(let i=0;i<5;i++){
+                    if(i < n) res += '<i class="fa-solid fa-star"></i>';
+                    else res += '<i class="fa-regular fa-star text-gray-300"></i>';
+                }
+                return res;
+            }
+
+            function setActive(tabBtn){
+                tabs.forEach(t => t.classList.remove('active','bg-gray-200','text-red-600'));
+                tabs.forEach(t => t.classList.add('text-gray-600'));
+                tabBtn.classList.add('active');
+                tabBtn.classList.remove('text-gray-600');
+                tabBtn.classList.add('bg-gray-200','text-red-600');
+            }
+
+            tabs.forEach(btn => {
+                btn.addEventListener('click', function(){
+                    const cat = btn.getAttribute('data-tab');
+                    setActive(btn);
+                    renderList(cat);
+                });
+            });
+
+            // default
+            const defaultBtn = document.querySelector('#new-arrivals-tabs .tab-btn[data-tab="tires"]');
+            setActive(defaultBtn);
+            renderList('tires');
+
+            // All Products hover behavior handled by CSS, ensure pointer
+            const allBtn = document.getElementById('all-products-btn');
+            allBtn.addEventListener('mouseenter', ()=> allBtn.style.cursor = 'pointer');
+        })();
+    </script>
+
+</section>
+    
 <!--thanh dịch vụ-->
 
 <section class="bg-automize-red py-12">
